@@ -19,7 +19,12 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    // The category tile background is a fixed pastel from content data (not
+    // theme-driven) so it stays light in both light and dark mode — the text
+    // on it must stay dark ink too, never colorScheme.onSurface (which turns
+    // near-white in dark mode and disappears on a light pastel card).
+    const ink = Color(0xFF201C3A);
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(AppRadius.r16),
@@ -36,12 +41,12 @@ class CategoryCard extends StatelessWidget {
             SizedBox(height: Insets.i8),
             Text(
               category.name,
-              style: AppCss.bodySmallSemiBold.size(16).textColor(colorScheme.onSurface),
+              style: AppCss.bodySmallSemiBold.size(16).textColor(ink),
             ),
             SizedBox(height: Insets.i2),
             Text(
               '$wordCount+ words',
-              style: AppCss.captionSmall.textColor(colorScheme.onSurface.withValues(alpha: 0.6)),
+              style: AppCss.captionSmall.textColor(ink.withValues(alpha: 0.65)),
             ),
           ],
         ),

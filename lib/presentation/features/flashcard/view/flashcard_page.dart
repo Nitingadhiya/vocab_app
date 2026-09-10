@@ -122,7 +122,7 @@ class _PagerRow extends StatelessWidget {
     final canNext = state.currentIndex < state.words.length - 1;
 
     void goTo(int index) {
-      context.go('/category/$categoryId/word/${state.words[index].id}');
+      context.pushReplacement('/category/$categoryId/word/${state.words[index].id}');
     }
 
     return Row(

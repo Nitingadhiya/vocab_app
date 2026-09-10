@@ -34,7 +34,7 @@ class LibraryPage extends StatelessWidget {
                         crossAxisCount: 2,
                         mainAxisSpacing: 12,
                         crossAxisSpacing: 12,
-                        childAspectRatio: 1.15,
+                        childAspectRatio: 0.95,
                       ),
                       itemCount: state.categories.length,
                       itemBuilder: (context, index) {
