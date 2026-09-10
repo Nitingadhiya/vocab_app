@@ -1,0 +1,44 @@
+[
+  {
+    "id": "alphabet",
+    "name": "Alphabet",
+    "emoji": "🔤",
+    "colorHex": "#FFF3D6",
+    "description": "Learn your ABCs"
+  },
+  {
+    "id": "animals",
+    "name": "Animals",
+    "emoji": "🐘",
+    "colorHex": "#DCEEFB",
+    "description": "Meet cute animals"
+  },
+  {
+    "id": "food",
+    "name": "Food",
+    "emoji": "🍎",
+    "colorHex": "#FDE2E2",
+    "description": "Yummy things to eat"
+  },
+  {
+    "id": "vehicles",
+    "name": "Vehicles",
+    "emoji": "🚗",
+    "colorHex": "#E3E8FF",
+    "description": "Things that go!"
+  },
+  {
+    "id": "colors",
+    "name": "Colors",
+    "emoji": "🌈",
+    "colorHex": "#F1E8FF",
+    "description": "All the colors"
+  },
+  {
+    "id": "nature",
+    "name": "Nature",
+    "emoji": "🌳",
+    "colorHex": "#DFF5E1",
+    "description": "The great outdoors"
+  }
+]
