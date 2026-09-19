@@ -14,7 +14,7 @@ void main() {
     await tester.pumpWidget(AppView(router: router));
     await tester.pumpAndSettle();
 
-    expect(find.text('Vocablurry'), findsOneWidget);
+    expect(find.text('Word Stars'), findsOneWidget);
     expect(find.text('Get Started'), findsOneWidget);
 
     await tester.tap(find.text('Get Started'));

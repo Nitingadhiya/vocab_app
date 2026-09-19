@@ -26,9 +26,18 @@ final class HomeError extends HomeState {
 final class HomeLoaded extends HomeState {
   final String childName;
   final List<CategoryWithCount> categories;
+  final DailyChallengeSummary dailyChallenge;
 
-  const HomeLoaded({required this.childName, required this.categories});
+  const HomeLoaded({required this.childName, required this.categories, required this.dailyChallenge});
+
+  HomeLoaded copyWith({DailyChallengeSummary? dailyChallenge}) {
+    return HomeLoaded(
+      childName: childName,
+      categories: categories,
+      dailyChallenge: dailyChallenge ?? this.dailyChallenge,
+    );
+  }
 
   @override
-  List<Object> get props => [childName, categories];
+  List<Object> get props => [childName, categories, dailyChallenge];
 }

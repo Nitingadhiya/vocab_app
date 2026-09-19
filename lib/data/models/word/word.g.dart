@@ -12,6 +12,7 @@ Word _$WordFromJson(Map<String, dynamic> json) => Word(
   text: json['text'] as String,
   emoji: json['emoji'] as String,
   letter: json['letter'] as String?,
+  phonicsSound: json['phonicsSound'] as String?,
 );
 
 Map<String, dynamic> _$WordToJson(Word instance) => <String, dynamic>{
@@ -20,4 +21,5 @@ Map<String, dynamic> _$WordToJson(Word instance) => <String, dynamic>{
   'text': instance.text,
   'emoji': instance.emoji,
   'letter': instance.letter,
+  'phonicsSound': instance.phonicsSound,
 };

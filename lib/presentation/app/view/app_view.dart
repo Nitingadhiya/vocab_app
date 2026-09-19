@@ -19,7 +19,7 @@ class AppView extends StatelessWidget {
       child: BlocBuilder<AppCubit, AppState>(
         builder: (context, state) {
           return MaterialApp.router(
-            title: 'Vocablurry',
+            title: 'Word Stars',
             debugShowCheckedModeBanner: false,
             theme: theme.light(),
             darkTheme: theme.dark(),

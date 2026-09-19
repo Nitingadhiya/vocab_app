@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:vocab_app/data/models/index.dart';
 import 'package:vocab_app/data/sources/local/preferences_provider.dart';
 
@@ -35,14 +37,30 @@ class ProgressRepository {
 
   ProgressRepository({required this.preferencesProvider});
 
+  final StreamController<void> _learnedWordsChanged = StreamController<void>.broadcast();
+
+  /// Fires after a word is learned for the first time, so screens that show
+  /// learning progress (Home's daily-challenge card, category lists) can
+  /// update immediately instead of waiting for a tab re-tap.
+  Stream<void> get learnedWordsChanged => _learnedWordsChanged.stream;
+
   Future<void> markWordLearned(String wordId) async {
     final learned = preferencesProvider.getLearnedWords();
     if (learned.containsKey(wordId)) return;
     learned[wordId] = DateTime.now().toIso8601String();
     await preferencesProvider.setLearnedWords(learned);
+    _learnedWordsChanged.add(null);
   }
 
   bool isWordLearned(String wordId) => preferencesProvider.getLearnedWords().containsKey(wordId);
+
+  Set<String> getLearnedWordIds() => preferencesProvider.getLearnedWords().keys.toSet();
+
+  bool isCategoryComplete(List<Word> categoryWords) {
+    if (categoryWords.isEmpty) return false;
+    final learned = preferencesProvider.getLearnedWords();
+    return categoryWords.every((w) => learned.containsKey(w.id));
+  }
 
   Set<String> getFavorites() => preferencesProvider.getFavorites();
 

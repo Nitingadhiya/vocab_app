@@ -5,7 +5,7 @@ import 'package:vocab_app/core/utils/textstyle_extensions.dart';
 
 /// App-wide theme configuration. Only used from the root app widget.
 class MaterialTheme {
-  static const Color _seed = Color(0xFF6C63FF); // Vocablurry purple
+  static const Color _seed = Color(0xFF6C63FF); // Word Stars purple
   static const Color _accentAmber = Color(0xFFFFC93C); // stars / streak
   static const Color _accentGreen = Color(0xFF22C55E); // success / correct
   static const Color _accentPink = Color(0xFFFF6B81); // errors / wrong answer

@@ -5,6 +5,11 @@ enum RouteName {
   progress,
   categoryDetail,
   flashcard,
+  phonicsHome,
+  phonics,
+  letterTracing,
   quiz,
   settings,
+  privacyPolicy,
+  about,
 }

@@ -1,5 +1,5 @@
 name: vocab_app
-description: "Vocablurry - a fun vocabulary learning app for curious little minds."
+description: "Word Stars - a fun vocabulary learning app for curious little minds."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -55,9 +55,20 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   build_runner: ^2.15.1
   json_serializable: ^6.14.1
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+# Regenerate app icons after editing assets/icon/*.png with:
+#   dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#6C63FF"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  remove_alpha_ios: true
 
 # The following section is specific to Flutter packages.
 flutter:

@@ -46,7 +46,7 @@ class OnboardingPage extends StatelessWidget {
                   ),
                   SizedBox(height: Insets.i16),
                   Text(
-                    'Vocablurry',
+                    'Word Stars',
                     style: AppCss.h3.bold.textColor(colorScheme.primary),
                   ),
                   SizedBox(height: Insets.i8),

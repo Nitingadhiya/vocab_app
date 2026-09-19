@@ -11,9 +11,11 @@ class PreferencesProvider {
   static const _kHasOnboarded = 'has_onboarded';
   static const _kLearnedWords = 'learned_words_v1'; // {wordId: isoTimestamp}
   static const _kFavorites = 'favorite_words_v1';
+  static const _kCompletedLetters = 'completed_letters_v1';
   static const _kAudioEnabled = 'audio_enabled';
   static const _kThemeMode = 'theme_mode'; // 'system' | 'light' | 'dark'
   static const _kChildName = 'child_name';
+  static const _kDailyChallengeDoneOn = 'daily_challenge_done_on_v1'; // 'yyyy-MM-dd' (local date)
 
   bool getHasOnboarded() => prefs.getBool(_kHasOnboarded) ?? false;
   Future<void> setHasOnboarded(bool value) => prefs.setBool(_kHasOnboarded, value);
@@ -30,6 +32,9 @@ class PreferencesProvider {
   Set<String> getFavorites() => (prefs.getStringList(_kFavorites) ?? const []).toSet();
   Future<void> setFavorites(Set<String> value) => prefs.setStringList(_kFavorites, value.toList());
 
+  Set<String> getCompletedLetters() => (prefs.getStringList(_kCompletedLetters) ?? const []).toSet();
+  Future<void> setCompletedLetters(Set<String> value) => prefs.setStringList(_kCompletedLetters, value.toList());
+
   bool getAudioEnabled() => prefs.getBool(_kAudioEnabled) ?? true;
   Future<void> setAudioEnabled(bool value) => prefs.setBool(_kAudioEnabled, value);
 
@@ -38,4 +43,7 @@ class PreferencesProvider {
 
   String getChildName() => prefs.getString(_kChildName) ?? 'Little Learner';
   Future<void> setChildName(String value) => prefs.setString(_kChildName, value);
+
+  String? getDailyChallengeDoneOn() => prefs.getString(_kDailyChallengeDoneOn);
+  Future<void> setDailyChallengeDoneOn(String value) => prefs.setString(_kDailyChallengeDoneOn, value);
 }

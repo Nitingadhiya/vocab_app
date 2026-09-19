@@ -7,6 +7,13 @@
     "description": "Learn your ABCs"
   },
   {
+    "id": "phonics",
+    "name": "Phonics",
+    "emoji": "🔊",
+    "colorHex": "#FFE4C7",
+    "description": "Letter sounds A to Z"
+  },
+  {
     "id": "animals",
     "name": "Animals",
     "emoji": "🐘",

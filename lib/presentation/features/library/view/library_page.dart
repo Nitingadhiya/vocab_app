@@ -42,7 +42,10 @@ class LibraryPage extends StatelessWidget {
                         return CategoryCard(
                           category: item.category,
                           wordCount: item.wordCount,
-                          onTap: () => context.push('/category/${item.category.id}'),
+                          index: index,
+                          onTap: () => context.push(
+                            item.category.id == 'phonics' ? '/phonics' : '/category/${item.category.id}',
+                          ),
                         );
                       },
                     )

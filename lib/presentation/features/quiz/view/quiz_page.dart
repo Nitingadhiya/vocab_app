@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vocab_app/core/theme/app_css.dart';
 import 'package:vocab_app/core/theme/scale.dart';
+import 'package:vocab_app/core/utils/color_extensions.dart';
 import 'package:vocab_app/core/utils/textstyle_extensions.dart';
 import 'package:vocab_app/data/models/index.dart';
+import 'package:vocab_app/presentation/common/confetti_overlay.dart';
 import 'package:vocab_app/presentation/common/dialogs.dart';
 import 'package:vocab_app/presentation/common/loading_widget.dart';
 import 'package:vocab_app/presentation/common/primary_button.dart';
@@ -24,6 +26,15 @@ class QuizPage extends StatelessWidget {
       listener: (context, state) {
         if (state is QuizError) {
           showAlertDialog(context: context, body: state.message);
+        }
+        if (state is QuizFinished) {
+          final isPerfect = state.correctCount == state.totalQuestions;
+          ConfettiOverlay.celebrate(
+            context,
+            title: isPerfect ? 'Perfect score!' : 'Quiz complete!',
+            subtitle: 'You got ${state.correctCount}/${state.totalQuestions} right 🎉',
+            accentColor: state.category.colorHex.toColor(),
+          );
         }
       },
       builder: (context, state) {

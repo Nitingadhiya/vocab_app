@@ -5,8 +5,11 @@ import 'package:vocab_app/core/theme/app_css.dart';
 import 'package:vocab_app/core/theme/scale.dart';
 import 'package:vocab_app/core/utils/color_extensions.dart';
 import 'package:vocab_app/core/utils/textstyle_extensions.dart';
+import 'package:vocab_app/data/repositories/daily_challenge_repository.dart';
+import 'package:vocab_app/presentation/common/confetti_overlay.dart';
 import 'package:vocab_app/presentation/common/dialogs.dart';
 import 'package:vocab_app/presentation/common/loading_widget.dart';
+import 'package:vocab_app/presentation/common/pager_row.dart';
 import 'package:vocab_app/presentation/features/flashcard/viewmodel/flashcard_cubit.dart';
 
 class FlashcardPage extends StatelessWidget {
@@ -24,6 +27,20 @@ class FlashcardPage extends StatelessWidget {
       listener: (context, state) {
         if (state is FlashcardError) {
           showAlertDialog(context: context, body: state.message);
+        }
+        if (state is FlashcardLoaded && state.celebrateCategoryComplete) {
+          ConfettiOverlay.celebrate(
+            context,
+            title: 'You finished ${state.category.name}!',
+            subtitle: 'Amazing work! 🎉',
+            accentColor: state.category.colorHex.toColor(),
+          );
+        }
+        final challengeUpdate = state is FlashcardLoaded ? state.dailyChallengeUpdate : null;
+        if (challengeUpdate != null) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(SnackBar(content: Text(_challengeMessage(challengeUpdate))));
         }
       },
       builder: (context, state) {
@@ -49,6 +66,16 @@ class FlashcardPage extends StatelessWidget {
       },
     );
   }
+}
+
+String _challengeMessage(DailyChallengeSummary summary) {
+  const target = DailyChallengeRepository.minLearnedWords;
+  if (summary.status == DailyChallengeStatus.available) {
+    return '🎉 $target / $target words learned — Daily Challenge Unlocked! Play it from Home.';
+  }
+  final remaining = summary.wordsRemaining;
+  return '🏆 ${summary.unlockProgress} / $target words learned — '
+      '$remaining more ${remaining == 1 ? 'word' : 'words'} to unlock the Daily Challenge';
 }
 
 class _FlashcardContent extends StatelessWidget {
@@ -101,97 +128,13 @@ class _FlashcardContent extends StatelessWidget {
             style: AppCss.captionSmall.textColor(colorScheme.onSurface.withValues(alpha: 0.5)),
           ),
           const Spacer(flex: 2),
-          _PagerRow(categoryId: categoryId, state: state),
+          PagerRow(
+            currentIndex: state.currentIndex,
+            itemCount: state.words.length,
+            onGoTo: (index) => context.pushReplacement('/category/$categoryId/word/${state.words[index].id}'),
+          ),
           SizedBox(height: Insets.i24),
         ],
-      ),
-    );
-  }
-}
-
-class _PagerRow extends StatelessWidget {
-  final String categoryId;
-  final FlashcardLoaded state;
-
-  const _PagerRow({required this.categoryId, required this.state});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final canPrev = state.currentIndex > 0;
-    final canNext = state.currentIndex < state.words.length - 1;
-
-    void goTo(int index) {
-      context.pushReplacement('/category/$categoryId/word/${state.words[index].id}');
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _NavCircle(
-          icon: Icons.chevron_left_rounded,
-          enabled: canPrev,
-          onTap: () => goTo(state.currentIndex - 1),
-        ),
-        SizedBox(width: Insets.i16),
-        if (state.words.length <= 10)
-          Row(
-            children: List.generate(state.words.length, (index) {
-              final active = index == state.currentIndex;
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: Insets.i3),
-                child: Container(
-                  width: active ? Sizes.s12 : Sizes.s8,
-                  height: Sizes.s8,
-                  decoration: BoxDecoration(
-                    color: active ? colorScheme.primary : colorScheme.outlineVariant,
-                    borderRadius: BorderRadius.circular(AppRadius.r6),
-                  ),
-                ),
-              );
-            }),
-          )
-        else
-          Text(
-            '${state.currentIndex + 1} / ${state.words.length}',
-            style: AppCss.captionSmall.textColor(colorScheme.onSurface.withValues(alpha: 0.6)),
-          ),
-        SizedBox(width: Insets.i16),
-        _NavCircle(
-          icon: Icons.chevron_right_rounded,
-          enabled: canNext,
-          onTap: () => goTo(state.currentIndex + 1),
-        ),
-      ],
-    );
-  }
-}
-
-class _NavCircle extends StatelessWidget {
-  final IconData icon;
-  final bool enabled;
-  final VoidCallback onTap;
-
-  const _NavCircle({required this.icon, required this.enabled, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return InkWell(
-      onTap: enabled ? onTap : null,
-      borderRadius: BorderRadius.circular(AppRadius.r24),
-      child: Container(
-        width: Sizes.s44,
-        height: Sizes.s44,
-        decoration: BoxDecoration(
-          color: enabled ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
-          shape: BoxShape.circle,
-        ),
-        alignment: Alignment.center,
-        child: Icon(
-          icon,
-          color: enabled ? colorScheme.primary : colorScheme.onSurface.withValues(alpha: 0.3),
-        ),
       ),
     );
   }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vocab_app/core/theme/app_css.dart';
 import 'package:vocab_app/core/theme/scale.dart';
 import 'package:vocab_app/core/utils/textstyle_extensions.dart';
 import 'package:vocab_app/presentation/app/viewmodel/app_cubit.dart';
-import 'package:vocab_app/presentation/common/dialogs.dart';
 import 'package:vocab_app/presentation/common/loading_widget.dart';
 import 'package:vocab_app/presentation/features/settings/viewmodel/settings_cubit.dart';
 
@@ -107,31 +107,14 @@ class _SettingsContent extends StatelessWidget {
           },
         ),
         _SettingsTile(
-          icon: Icons.shield_rounded,
-          title: 'Parental Controls',
-          onTap: () => showAlertDialog(
-            context: context,
-            title: 'Parental Controls',
-            body: 'Manage screen time and content settings here soon.',
-          ),
-        ),
-        _SettingsTile(
-          icon: Icons.help_outline_rounded,
-          title: 'Help & Support',
-          onTap: () => showAlertDialog(
-            context: context,
-            title: 'Help & Support',
-            body: 'Need help? Reach out to us any time.',
-          ),
+          icon: Icons.privacy_tip_rounded,
+          title: 'Privacy Policy',
+          onTap: () => context.push('/settings/privacy-policy'),
         ),
         _SettingsTile(
           icon: Icons.info_outline_rounded,
-          title: 'About Vocablurry',
-          onTap: () => showAlertDialog(
-            context: context,
-            title: 'About Vocablurry',
-            body: 'Vocablurry helps curious little minds learn new words, one small step at a time.',
-          ),
+          title: 'About Word Stars',
+          onTap: () => context.push('/settings/about'),
         ),
         SizedBox(height: Insets.i16),
         Container(

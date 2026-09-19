@@ -79,6 +79,33 @@ GoRouter buildAppRouter() {
         },
       ),
       GoRoute(
+        path: '/phonics',
+        name: RouteName.phonicsHome.name,
+        builder: (context, state) => const PhonicsHomePage(),
+      ),
+      GoRoute(
+        path: '/phonics/tracing/:letterId',
+        name: RouteName.letterTracing.name,
+        builder: (context, state) {
+          final letterId = state.pathParameters['letterId']!;
+          return BlocProvider(
+            create: (_) => locator.get<LetterTracingCubit>()..init(letterId),
+            child: LetterTracingPage(letterId: letterId),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/phonics/:letterId',
+        name: RouteName.phonics.name,
+        builder: (context, state) {
+          final letterId = state.pathParameters['letterId']!;
+          return BlocProvider(
+            create: (_) => locator.get<PhonicsCubit>()..init(letterId),
+            child: PhonicsPage(letterId: letterId),
+          );
+        },
+      ),
+      GoRoute(
         path: '/category/:categoryId/quiz',
         name: RouteName.quiz.name,
         builder: (context, state) {
@@ -96,6 +123,16 @@ GoRouter buildAppRouter() {
           create: (_) => locator.get<SettingsCubit>()..init(),
           child: const SettingsPage(),
         ),
+      ),
+      GoRoute(
+        path: '/settings/privacy-policy',
+        name: RouteName.privacyPolicy.name,
+        builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+      GoRoute(
+        path: '/settings/about',
+        name: RouteName.about.name,
+        builder: (context, state) => const AboutPage(),
       ),
     ],
   );

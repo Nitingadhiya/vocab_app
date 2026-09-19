@@ -26,9 +26,16 @@ final class CategoryDetailError extends CategoryDetailState {
 final class CategoryDetailLoaded extends CategoryDetailState {
   final Category category;
   final List<Word> words;
+  final Set<String> learnedWordIds;
+  final DailyChallengeSummary dailyChallenge;
 
-  const CategoryDetailLoaded({required this.category, required this.words});
+  const CategoryDetailLoaded({
+    required this.category,
+    required this.words,
+    required this.learnedWordIds,
+    required this.dailyChallenge,
+  });
 
   @override
-  List<Object> get props => [category, words];
+  List<Object> get props => [category, words, learnedWordIds, dailyChallenge];
 }

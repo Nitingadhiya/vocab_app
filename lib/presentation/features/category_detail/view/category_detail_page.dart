@@ -5,6 +5,7 @@ import 'package:vocab_app/core/theme/app_css.dart';
 import 'package:vocab_app/core/theme/scale.dart';
 import 'package:vocab_app/core/utils/color_extensions.dart';
 import 'package:vocab_app/core/utils/textstyle_extensions.dart';
+import 'package:vocab_app/data/repositories/daily_challenge_repository.dart';
 import 'package:vocab_app/presentation/common/dialogs.dart';
 import 'package:vocab_app/presentation/common/emoji_tile.dart';
 import 'package:vocab_app/presentation/common/loading_widget.dart';
@@ -39,6 +40,9 @@ class CategoryDetailPage extends StatelessWidget {
               : state is CategoryDetailLoaded
                   ? Column(
                       children: [
+                        if (state.category.id != DailyChallengeRepository.excludedCategoryId &&
+                            state.dailyChallenge.status == DailyChallengeStatus.locked)
+                          _UnlockHint(summary: state.dailyChallenge),
                         Expanded(
                           child: ListView.separated(
                             padding: EdgeInsets.all(Insets.i20),
@@ -46,9 +50,13 @@ class CategoryDetailPage extends StatelessWidget {
                             separatorBuilder: (_, _) => SizedBox(height: Insets.i12),
                             itemBuilder: (context, index) {
                               final word = state.words[index];
+                              final isPhonics = state.category.id == 'phonics';
+                              final isLearned = state.learnedWordIds.contains(word.id);
                               return InkWell(
                                 borderRadius: BorderRadius.circular(AppRadius.r16),
-                                onTap: () => context.push('/category/$categoryId/word/${word.id}'),
+                                onTap: () => isPhonics
+                                    ? context.push('/phonics/${word.id}')
+                                    : context.push('/category/$categoryId/word/${word.id}'),
                                 child: Container(
                                   padding: EdgeInsets.all(Insets.i12),
                                   decoration: BoxDecoration(
@@ -70,6 +78,10 @@ class CategoryDetailPage extends StatelessWidget {
                                           style: AppCss.bodySmallSemiBold.size(18).textColor(colorScheme.onSurface),
                                         ),
                                       ),
+                                      if (isLearned && !isPhonics) ...[
+                                        Icon(Icons.check_circle_rounded, color: colorScheme.tertiary),
+                                        SizedBox(width: Insets.i8),
+                                      ],
                                       Icon(Icons.chevron_right_rounded, color: colorScheme.onSurface.withValues(alpha: 0.4)),
                                     ],
                                   ),
@@ -78,21 +90,57 @@ class CategoryDetailPage extends StatelessWidget {
                             },
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(Insets.i20, 0, Insets.i20, Insets.i20),
-                          child: PrimaryButton(
-                            label: 'Quiz Me',
-                            trailingIcon: Icons.headphones_rounded,
-                            backgroundColor: colorScheme.tertiary,
-                            foregroundColor: colorScheme.onTertiary,
-                            onPressed: state.words.isEmpty ? null : () => context.push('/category/$categoryId/quiz'),
+                        if (state.category.id != 'phonics')
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(Insets.i20, 0, Insets.i20, Insets.i20),
+                            child: PrimaryButton(
+                              label: 'Quiz Me',
+                              trailingIcon: Icons.headphones_rounded,
+                              backgroundColor: colorScheme.tertiary,
+                              foregroundColor: colorScheme.onTertiary,
+                              onPressed:
+                                  state.words.isEmpty ? null : () => context.push('/category/$categoryId/quiz'),
+                            ),
                           ),
-                        ),
                       ],
                     )
                   : const SizedBox.shrink(),
         );
       },
+    );
+  }
+}
+
+/// Shown above a category's words while the daily challenge is still locked:
+/// says what counts (opening a word) and how far along the child is.
+class _UnlockHint extends StatelessWidget {
+  final DailyChallengeSummary summary;
+
+  const _UnlockHint({required this.summary});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      margin: EdgeInsets.fromLTRB(Insets.i20, Insets.i8, Insets.i20, 0),
+      padding: EdgeInsets.symmetric(horizontal: Insets.i12, vertical: Insets.i10),
+      decoration: BoxDecoration(
+        color: colorScheme.tertiaryContainer,
+        borderRadius: BorderRadius.circular(AppRadius.r12),
+      ),
+      child: Row(
+        children: [
+          const Text('🏆', style: TextStyle(fontSize: 20)),
+          SizedBox(width: Insets.i10),
+          Expanded(
+            child: Text(
+              'Open any word to learn it. ${summary.unlockProgress} / ${DailyChallengeRepository.minLearnedWords} '
+              'words learned to unlock the Daily Challenge.',
+              style: AppCss.captionSmall.size(13).textColor(colorScheme.onTertiaryContainer),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

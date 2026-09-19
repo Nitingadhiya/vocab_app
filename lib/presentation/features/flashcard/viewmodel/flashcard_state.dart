@@ -29,11 +29,23 @@ final class FlashcardLoaded extends FlashcardState {
   final int currentIndex;
   final bool isFavorite;
 
+  /// True for exactly the one emit where the word just loaded was the last
+  /// of the category still needed — tells the page to fire the big confetti
+  /// celebration for finishing the whole category.
+  final bool celebrateCategoryComplete;
+
+  /// Set for exactly the one emit where opening this card newly learned a word
+  /// that moved the daily-challenge unlock forward (or completed it) — the
+  /// page turns it into an "n / 3 words learned" toast. Null otherwise.
+  final DailyChallengeSummary? dailyChallengeUpdate;
+
   const FlashcardLoaded({
     required this.category,
     required this.words,
     required this.currentIndex,
     required this.isFavorite,
+    this.celebrateCategoryComplete = false,
+    this.dailyChallengeUpdate,
   });
 
   Word get currentWord => words[currentIndex];
@@ -48,5 +60,6 @@ final class FlashcardLoaded extends FlashcardState {
   }
 
   @override
-  List<Object> get props => [category, words, currentIndex, isFavorite];
+  List<Object?> get props =>
+      [category, words, currentIndex, isFavorite, celebrateCategoryComplete, dailyChallengeUpdate];
 }
